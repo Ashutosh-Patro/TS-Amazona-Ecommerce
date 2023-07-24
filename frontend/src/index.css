@@ -23,6 +23,6 @@
   color: #ffc000;
 }
 
-.card-img-top {
-  
+img.large {
+  max-width: 100%;
 }
