@@ -1,12 +1,15 @@
 import { useContext, useEffect } from "react";
-import { Button, Container, Nav, Navbar } from "react-bootstrap";
+import { Badge, Button, Container, Nav, Navbar } from "react-bootstrap";
 // import HomePage from "./pages/HomePage";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Store } from "./Store";
+import { LinkContainer } from "react-router-bootstrap";
 
 function App() {
   const {
-    state: { mode },
+    state: { mode, cart },
     dispatch,
   } = useContext(Store);
 
@@ -20,10 +23,13 @@ function App() {
 
   return (
     <div className="d-flex flex-column vh-100">
+      <ToastContainer position="bottom-center" limit={1} />
       <header>
         <Navbar expand="lg">
           <Container>
-            <Navbar.Brand>tsamazona</Navbar.Brand>
+            <LinkContainer to="/">
+              <Navbar.Brand>TSAmazona</Navbar.Brand>
+            </LinkContainer>
           </Container>
           <Nav>
             <Button variant={mode} onClick={changeThemeButtonHandler}>
@@ -35,9 +41,14 @@ function App() {
                 }
               ></i>
             </Button>
-            <a href="/cart" className="nav-link">
+            <Link to="/cart" className="nav-link">
               Cart
-            </a>
+              {cart.cartItems.length > 0 && (
+                <Badge pill bg="danger">
+                  {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
+                </Badge>
+              )}
+            </Link>
             <a href="/signin" className="nav-link">
               Sign In
             </a>
