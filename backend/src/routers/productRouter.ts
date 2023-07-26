@@ -1,23 +1,14 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
-import { ProductModel } from "../models/productModel";
+import { productModel } from "../models/productModel";
+
 export const productRouter = express.Router();
-
-// const app = express();
-
-// app.get("/api/products", (req: Request, res: Response) => {
-//   res.json(sampleProducts);
-// });
-
-// app.get("/api/products/:slug", (req: Request, res: Response) => {
-//   res.json(sampleProducts.find((x) => x.slug === req.params.slug));
-// });
 
 // /api/products
 productRouter.get(
   "/",
-  asyncHandler(async (req, res) => {
-    const products = await ProductModel.find();
+  asyncHandler(async (req: Request, res: Response) => {
+    const products = await productModel.find();
     if (products) {
       res.json(products);
     }
@@ -27,8 +18,8 @@ productRouter.get(
 // /api/slug/tshirt
 productRouter.get(
   "/slug/:slug",
-  asyncHandler(async (req, res) => {
-    const product = await ProductModel.findOne({ slug: req.params.slug });
+  asyncHandler(async (req: Request, res: Response) => {
+    const product = await productModel.findOne({ slug: req.params.slug });
     if (product) {
       res.json(product);
     } else {
