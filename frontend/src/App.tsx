@@ -1,5 +1,12 @@
 import { useContext, useEffect } from "react";
-import { Badge, Button, Container, Nav, Navbar } from "react-bootstrap";
+import {
+  Badge,
+  Button,
+  Container,
+  Nav,
+  NavDropdown,
+  Navbar,
+} from "react-bootstrap";
 // import HomePage from "./pages/HomePage";
 import { Link, Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -9,7 +16,7 @@ import { LinkContainer } from "react-router-bootstrap";
 
 function App() {
   const {
-    state: { mode, cart },
+    state: { userInfo, mode, cart },
     dispatch,
   } = useContext(Store);
 
@@ -19,6 +26,15 @@ function App() {
 
   const changeThemeButtonHandler = () => {
     dispatch({ type: "SWITCH_MODE" });
+  };
+
+  const signoutHandler = () => {
+    dispatch({ type: "USER_SIGNOUT" });
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("cartItems");
+    localStorage.removeItem("shippingAddress");
+    localStorage.removeItem("paymentMethod");
+    window.location.href = "/signin";
   };
 
   return (
@@ -49,9 +65,21 @@ function App() {
                 </Badge>
               )}
             </Link>
-            <a href="/signin" className="nav-link">
-              Sign In
-            </a>
+            {userInfo ? (
+              <NavDropdown title={userInfo.name} id="basic-nav-dropdown">
+                <Link
+                  to="#signout"
+                  className="dropdown-item"
+                  onClick={signoutHandler}
+                >
+                  Sign Out
+                </Link>
+              </NavDropdown>
+            ) : (
+              <Link className="nav-link" to="/signin">
+                Sign In
+              </Link>
+            )}
           </Nav>
         </Navbar>
       </header>
