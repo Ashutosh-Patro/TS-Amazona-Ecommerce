@@ -24,3 +24,20 @@ export const userSignin = asyncHandler(async (req: Request, res: Response) => {
   }
   res.status(401).send({ message: "Invalid email or password" });
 });
+
+// User Signup
+export const userSignup = asyncHandler(async (req: Request, res: Response) => {
+  const user = await userModel.create({
+    name: req.body.name,
+    email: req.body.email,
+    password: bcrypt.hashSync(req.body.password),
+  } as Users);
+
+  res.json({
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    isAdmin: user.isAdmin,
+    token: generateToken(user),
+  });
+});
